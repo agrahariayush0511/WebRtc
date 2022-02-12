@@ -8,17 +8,14 @@ import Authenticate from './pages/authenticate/Authenticate';
 import Activate from './pages/activate/Activate'
 import Rooms from './pages/Rooms/Rooms'
 import {useSelector} from 'react-redux'
-
-
-// const isAuth = false;
-// const user = {
-//     activated: true,
-// }
-
+import {useLoadingWithRefresh} from './hooks/useLoadingWithRefresh'
+import Loader from './components/shared/Loader/Loader'
 
 function App() {
-    return (
-        <BrowserRouter>
+
+    const {loading} = useLoadingWithRefresh(); 
+    return loading ? (<Loader message="Loading, please wait... "/>) : (
+            <BrowserRouter>
             <Navigation />
             <Routes>
                 <Route path="/" exact element={<GuestRouteHome/>}/>
@@ -33,17 +30,17 @@ function App() {
                 
             </Routes>
         </BrowserRouter>
-    );
+    )
 }
 
 const GuestRoute = (location) => {
     const {isAuth} = useSelector((state) => state.auth)
-
+    
     return (
-         
-           isAuth ?
-                <Navigate to={
-                    {
+        
+        isAuth ?
+        <Navigate to={
+            {
                         pathname:'/rooms',
                         state: {from: location}
                     }
@@ -126,7 +123,5 @@ const SemiProtectedRoute = ({location}) => {
     )
     
 }
-
-
 
 export default App;
